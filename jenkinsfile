@@ -2,7 +2,7 @@ pipeline {
     agent none
     environment {
         DOCKERHUB_AUTH = credentials('ssh_prod')
-        ID_DOCKER = "${DOCKERHUB_AUTH_USR}"
+        ID_DOCKER =  "${ssh_prod_USR}"  //"${DOCKERHUB_AUTH_USR}"
         PORT_EXPOSED = "80"
     }
 
