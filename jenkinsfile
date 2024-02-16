@@ -1,7 +1,7 @@
 pipeline {
     agent none
     environment {
-        DOCKERHUB_AUTH = credentials('DOCKERHUB_AUTH')
+        DOCKERHUB_AUTH = credentials('ssh_prod')
         ID_DOCKER = "${DOCKERHUB_AUTH_USR}"
         PORT_EXPOSED = "80"
     }
@@ -63,7 +63,7 @@ pipeline {
         stage('Deploy in staging') {
             agent any
             environment {
-                HOSTNAME_DEPLOY_STAGING = "ec2-35-175-241-34.compute-1.amazonaws.com"
+                HOSTNAME_DEPLOY_STAGING = "ec2-54-162-149-243.compute-1.amazonaws.com"
             }
             steps {
                 sshagent(credentials:['SSH_AUTH_SERVER']) {
