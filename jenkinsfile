@@ -4,6 +4,7 @@ pipeline {
         DOCKERHUB_AUTH = credentials('DOCKERHUB_AUTH')
         ID_DOCKER =  "${DOCKERHUB_AUTH_USR}"
         PORT_EXPOSED = "80"
+        HOSTNAME_DEPLOY_STAGING = "ec2-34-238-150-39.compute-1.amazonaws.com"
     }
 
     stages {
@@ -62,9 +63,6 @@ pipeline {
         }
         stage('Deploy in staging') {
             agent any
-            environment {
-                HOSTNAME_DEPLOY_STAGING = "ec2-34-238-150-39.compute-1.amazonaws.com"
-            }
             steps {
                 sshagent(credentials:['SSH_AUTH_SERVER']) { //SSH_AUTH_SERVER
                     sh '''
@@ -82,6 +80,17 @@ pipeline {
                             -C "$command1 && $command2 && $command3 && $command4"
                     '''
                 }
+            }
+        }
+        //Ajout du test staging
+        stage('Test Staging') {
+            agent any
+            steps {
+              script {
+                sh '''
+                  curl ${HOSTNAME_DEPLOY_STAGING} | grep -q "Hello world!"
+                '''
+              }
             }
         }
     }
